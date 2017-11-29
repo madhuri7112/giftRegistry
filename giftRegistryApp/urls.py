@@ -39,6 +39,6 @@ urlpatterns = [
     url(r'^logout', views.logout, name='login'),
     url(r'^newuser', views.register_new_user, name='register_new_user'),
     url(r'^createregistry', views.create_registry_api, name='create_registry_api'),
-
+    url(r'^registries', views.get_registries, name='get_registry_api')
 
 ]

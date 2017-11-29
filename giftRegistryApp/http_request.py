@@ -29,7 +29,7 @@ def make_get_request(url, params):
     'cache-control': "no-cache"
     }
 
-    r = requests.get(get_url, params = json.dumps(params), headers = headers)
+    r = requests.get(get_url, params = params, headers = headers)
 
     return r.json()
 

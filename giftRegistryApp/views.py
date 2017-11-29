@@ -15,8 +15,11 @@ import json
 import appManager
 
 CODE_NOT_FOUND = 404
+CODE_FORBIDDEN = 403
 
 MESSAGE_MISSING_PARAMETERS = "Missing parameters"
+MESSAGE_NOT_LOGGED_IN  = "You are not logged in."
+KEY_HTTP_TOKEN = 'HTTP_AUTHORIZATION'
 
 def index(request):
     a = {"abc":"24"};
@@ -26,6 +29,7 @@ def index(request):
 @csrf_exempt
 def login(request):
     parameters = json.loads(request.body)
+    
     if 'username' not in parameters or 'password' not in parameters:
         return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
     else :
@@ -66,6 +70,26 @@ def register_new_user(request):
     result = appManager.new_user(username, password, email)
 
     return JsonResponse(result)
+
+@csrf_exempt
+def get_registries(request):
+
+    if KEY_HTTP_TOKEN not in request.META:
+       return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+    #parameters = json.loads(request.body)
+    token = request.META[KEY_HTTP_TOKEN]
+    user = appManager.fetch_user_details(token)
+
+    
+    user_id = user['id']
+
+
+    #return {'user_id': user_id}
+    result = appManager.get_registries(user_id)
+
+    return JsonResponse(result)
+
+
     
 def return_error_response(code, message):
      error = {
