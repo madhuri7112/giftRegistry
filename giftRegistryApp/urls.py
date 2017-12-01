@@ -37,8 +37,10 @@ urlpatterns = [
     url(r'^index/$', views.index, name='index'),
     url(r'^login', views.login, name='login'),
     url(r'^logout', views.logout, name='login'),
+    url(r'^changepassword', views.change_password, name='changepassword'),
     url(r'^newuser', views.register_new_user, name='register_new_user'),
     url(r'^createregistry', views.create_registry_api, name='create_registry_api'),
-    url(r'^registries', views.get_registries, name='get_registry_api')
+    url(r'^registries', views.get_registries, name='get_registry_api'),
+    url(r'^userdetails', views.get_user_details, name='get_user_details')
 
 ]

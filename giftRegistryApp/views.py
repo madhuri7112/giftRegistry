@@ -31,7 +31,7 @@ def login(request):
     parameters = json.loads(request.body)
     
     if 'username' not in parameters or 'password' not in parameters:
-        return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
     else :
        username = parameters['username']
        password = parameters['password']
@@ -43,7 +43,7 @@ def login(request):
 def logout(request):
     parameters = json.loads(request.body)
     if 'user_id' not in parameters:
-        return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     user_id = parameters['user_id']
     result = appManager.logout(user_id)
@@ -61,7 +61,7 @@ def register_new_user(request):
 
     parameters = json.loads(request.body)
     if 'username' not in parameters or 'password' not in parameters or 'email' not in parameters:
-        return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     username = parameters['username']
     password = parameters['password']
@@ -74,25 +74,41 @@ def register_new_user(request):
 @csrf_exempt
 def get_registries(request):
 
-    if KEY_HTTP_TOKEN not in request.META:
-       return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
-    #parameters = json.loads(request.body)
-    token = request.META[KEY_HTTP_TOKEN]
-    user = appManager.fetch_user_details(token)
+    # if KEY_HTTP_TOKEN not in request.META:
+    #    appManager.return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+    # #parameters = json.loads(request.body)
+    # token = request.META[KEY_HTTP_TOKEN]
+    # user = appManager.fetch_user_details(token)
+    # user_id = user['id']
 
-    
-    user_id = user['id']
-
+    user_details = appManager.get_user_details_from_request(request)
 
     #return {'user_id': user_id}
-    result = appManager.get_registries(user_id)
+    result = appManager.get_registries(user_details['id'])
 
     return JsonResponse(result)
 
+@csrf_exempt
+def change_password(request):
 
-    
-def return_error_response(code, message):
-     error = {
-        "error_code" : code,
-        "error_message" :message
-     }
+    parameters = json.loads(request.body)
+    user_details = appManager.get_user_details_from_request(request)
+    password = parameters['password']
+
+    result = appManager.change_password(user_details['id'], password)
+
+    return JsonResponse(result)
+
+def get_user_details(request):
+    # if KEY_HTTP_TOKEN not in request.META:
+    #    appManager.return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+
+    # token = request.META[KEY_HTTP_TOKEN]
+    # user = appManager.fetch_user_details(token)
+
+    user_details = appManager.get_user_details_from_request(request)
+
+    return JsonResponse(user_details)
+
+   
+
