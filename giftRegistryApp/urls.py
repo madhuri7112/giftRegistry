@@ -18,22 +18,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    #url(r'^gift/$', views.index, name='index'),
-    # url(r'^getusers', views.user_list_api, name='user_list'),
-    # url(r'^getuser', views.user_details_api, name='user_list'),
-    # url(r'^registeruser', views.register_user_api, name='register_user'),
-    # url(r'^createtoken', views.createtoken_api, name='create_token'),
-    # url(r'^userfromtoken', views.get_user_from_token_api, name='user_from_token'),
-
-    # url(r'^createregistry', views.create_registry_api, name='create_registry_api'),
-    # url(r'^getregistry', views.get_registry_api, name='get_registry_api'),
-    # url(r'^registries', views.registry_list_api, name='get_registry_api'),
-    # url(r'^additemtoregistry', views.add_item_registry_api, name='add_item_registry_api'),
-    # url(r'^removeitemfromregistry', views.remove_item_registry_api, name='remove_item_registry_api'),
-    # url(r'^giveaccess', views.give_access_registry_api, name='add_item_registry_api'),
-    # url(r'^denyaccess', views.deny_access_registry_api, name='add_item_registry_api'),
-
-    # url(r'^additemtoinventory', views.add_item_inventory_api, name='add_item_inventory_api')
+    
     url(r'^index/$', views.index, name='index'),
     url(r'^login', views.login, name='login'),
     url(r'^logout', views.logout, name='login'),
@@ -41,6 +26,11 @@ urlpatterns = [
     url(r'^newuser', views.register_new_user, name='register_new_user'),
     url(r'^createregistry', views.create_registry_api, name='create_registry_api'),
     url(r'^registries', views.get_registries, name='get_registry_api'),
-    url(r'^userdetails', views.get_user_details, name='get_user_details')
-
+    url(r'^userdetails', views.get_user_details, name='get_user_details'),
+    url(r'^assignitem', views.assign_item, name='get_user_details'),
+    url(r'^unassignitem', views.unassign_item, name='get_user_details'),
+    url(r'^getregistry', views.get_registry_details, name='get_registry_details'),
+    url(r'^additemtoregistry', views.add_item_to_registry, name='get_registry_details'),
+    url(r'^items', views.get_items, name='get_items'),
+    url(r'^getusers', views.get_users, name='get_users')   
 ]

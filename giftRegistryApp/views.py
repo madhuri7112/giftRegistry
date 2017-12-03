@@ -13,13 +13,8 @@ from rest_framework.parsers import JSONParser
 import json
 
 import appManager
+from constants import *
 
-CODE_NOT_FOUND = 404
-CODE_FORBIDDEN = 403
-
-MESSAGE_MISSING_PARAMETERS = "Missing parameters"
-MESSAGE_NOT_LOGGED_IN  = "You are not logged in."
-KEY_HTTP_TOKEN = 'HTTP_AUTHORIZATION'
 
 def index(request):
     a = {"abc":"24"};
@@ -31,7 +26,7 @@ def login(request):
     parameters = json.loads(request.body)
     
     if 'username' not in parameters or 'password' not in parameters:
-        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        return appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
     else :
        username = parameters['username']
        password = parameters['password']
@@ -43,25 +38,38 @@ def login(request):
 def logout(request):
     parameters = json.loads(request.body)
     if 'user_id' not in parameters:
-        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        return appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     user_id = parameters['user_id']
     result = appManager.logout(user_id)
 
     return JsonResponse(result)
 
+@csrf_exempt
 def create_registry_api(request):
 
-    headers = request.headers
-    token = headers['token']
-    user_id = appManager.fetch_user_id(token)
+    parameters = json.loads(request.body)
+    user_details = appManager.get_user_details_from_request(request)
+
+    if 'name' not in parameters or 'public' not in parameters:
+        return appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+
+    user_id = user_details['id']
+    name = parameters['name']
+    public = parameters['public']
+    allowed_users = parameters['allowed_users']
+ 
+    result = appManager.create_registry(user_id, name, public, allowed_users)
+
+    return JsonResponse(result)
+
 
 @csrf_exempt
 def register_new_user(request):
 
     parameters = json.loads(request.body)
     if 'username' not in parameters or 'password' not in parameters or 'email' not in parameters:
-        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        return appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     username = parameters['username']
     password = parameters['password']
@@ -73,13 +81,6 @@ def register_new_user(request):
 
 @csrf_exempt
 def get_registries(request):
-
-    # if KEY_HTTP_TOKEN not in request.META:
-    #    appManager.return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
-    # #parameters = json.loads(request.body)
-    # token = request.META[KEY_HTTP_TOKEN]
-    # user = appManager.fetch_user_details(token)
-    # user_id = user['id']
 
     user_details = appManager.get_user_details_from_request(request)
 
@@ -100,15 +101,77 @@ def change_password(request):
     return JsonResponse(result)
 
 def get_user_details(request):
-    # if KEY_HTTP_TOKEN not in request.META:
-    #    appManager.return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
-
-    # token = request.META[KEY_HTTP_TOKEN]
-    # user = appManager.fetch_user_details(token)
-
+    
     user_details = appManager.get_user_details_from_request(request)
 
     return JsonResponse(user_details)
 
-   
+@csrf_exempt
+def assign_item(request):
+
+    user_details = appManager.get_user_details_from_request(request)
+
+    parameters = json.loads(request.body)
+    if 'registry_item_id' not in parameters:
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+
+    registry_item_id = parameters['registry_item_id']
+    res = appManager.assign_item(user_details['id'], registry_item_id)
+
+    return JsonResponse(res)
+
+@csrf_exempt
+def unassign_item(request):
+
+    user_details = appManager.get_user_details_from_request(request)
+
+    parameters = json.loads(request.body)
+    if 'registry_item_id' not in parameters:
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+
+    registry_item_id = parameters['registry_item_id']
+    res = appManager.unassign_item(user_details['id'], registry_item_id)
+
+    return JsonResponse(res)
+
+
+def get_registry_details(request):
+
+    user_details = appManager.get_user_details_from_request(request)
+    # parameters = json.loads(request.body)
+
+    # if 'registry_id' not in parameters:
+    #     appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+
+    registry_id = request.GET['registry_id']
+    res = appManager.get_registry_details(user_details['id'], registry_id)
+
+    return JsonResponse(res)
+
+@csrf_exempt
+def add_item_to_registry(request):
+    user_details = appManager.get_user_details_from_request(request)
+
+    parameters = json.loads(request.body)
+    if 'registry_id' not in parameters or 'item_id' not in parameters:
+        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+
+    registry_id = parameters['registry_id']
+    item_id = parameters['item_id']
+    print user_details
+    res = appManager.add_item_to_registry(user_details['id'], registry_id, item_id)
+
+    return JsonResponse(res)
+
+def get_items(request):
+
+    res = appManager.get_items()
+
+    return JsonResponse(res)
+
+def get_users(request):
+
+    res = appManager.get_users()
+
+    return JsonResponse(res)
 

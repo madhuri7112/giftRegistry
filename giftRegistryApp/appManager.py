@@ -1,15 +1,23 @@
 
 import http_request
+from constants import *
 
-KEY_HTTP_TOKEN = 'HTTP_AUTHORIZATION'
 
-LOGIN_URL = '/createtoken'
-LOGOUT_URL = '/logout'
-USER_FROM_TOKEN_URL = '/userfromtoken'
-NEW_USER_REGISTRATION_URL = '/registeruser'
-CREATE_REGISTRY = '/createregistry'
-GET_REGISTRIES_URL = '/registries'
-CHANGE_PASSWORD_URL = '/changepassword'
+
+LOGIN_API = '/createtoken'
+LOGOUT_API = '/logout'
+USER_FROM_TOKEN_API = '/userfromtoken'
+NEW_USER_REGISTRATION_API = '/registeruser'
+# CREATE_REGISTRY = '/createregistry'
+GET_REGISTRIES_API = '/registries'
+CHANGE_PASSWORD_API = '/changepassword'
+ASSIGN_ITEM_API = '/assignitem'
+UNASSIGN_ITEM_API = '/unassignitem'
+CREATE_REGISTRY_API = '/createregistry'
+GET_REGISTRY_DETAILS_API = '/getregistry'
+ADD_ITEM_REGISTRY_API = '/additemtoregistry'
+GET_ITEMS_API = '/items'
+GET_USERS_API = '/getusers'
 
 
 def login(username, password):
@@ -19,7 +27,7 @@ def login(username, password):
     'password': password
     }
     
-    res = http_request.make_post_request(LOGIN_URL, params)
+    res = http_request.make_post_request(LOGIN_API, params)
     
     return res
 
@@ -28,7 +36,7 @@ def logout(user_id):
     params = {
       'user_id' : user_id
     }
-    res = http_request.make_post_request(LOGOUT_URL, params)
+    res = http_request.make_post_request(LOGOUT_API, params)
    
     return res
 
@@ -39,7 +47,7 @@ def fetch_user_details(token):
       'token' : token
     }
 
-    res = http_request.make_get_request(USER_FROM_TOKEN_URL, params)
+    res = http_request.make_get_request(USER_FROM_TOKEN_API, params)
 
     return res
 
@@ -51,7 +59,7 @@ def new_user(username, password, email):
     'email': email
     }
     
-    res = http_request.make_post_request(NEW_USER_REGISTRATION_URL, params)
+    res = http_request.make_post_request(NEW_USER_REGISTRATION_API, params)
     
     return res
 
@@ -62,7 +70,7 @@ def get_registries(user_id):
        'user_id': user_id
     }
 
-    res = http_request.make_get_request(GET_REGISTRIES_URL, params)
+    res = http_request.make_get_request(GET_REGISTRIES_API, params)
 
     return res
 
@@ -73,13 +81,14 @@ def change_password(user_id, password):
        'password' : password
     }
 
-    res = http_request.make_post_request(CHANGE_PASSWORD_URL, params)
+    res = http_request.make_post_request(CHANGE_PASSWORD_API, params)
     
     return res
 
 def get_user_details_from_request(request):
     if KEY_HTTP_TOKEN not in request.META:
-       return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+       return return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+
     token = request.META[KEY_HTTP_TOKEN]
     user = fetch_user_details(token)
     
@@ -91,6 +100,71 @@ def return_error_response(code, message):
         "error_message" :message
      }
 
-def create_registry():
+     return error
 
-    return
+def assign_item(user_id, registry_item_id):
+
+    params = {
+        'user_id': user_id,
+        'registry_item_id': registry_item_id
+    }
+    res = http_request.make_post_request(ASSIGN_ITEM_API, params)
+    
+    return res
+
+def unassign_item(user_id, registry_item_id):
+
+    params = {
+        'user_id': user_id,
+        'registry_item_id': registry_item_id
+    }
+    res = http_request.make_post_request(UNASSIGN_ITEM_API, params)
+    
+    return res
+
+def create_registry(user_id, name, public, allowed_users):
+
+    params = {
+         'user_id': user_id,
+         'name': name,
+         'public': public,
+         'allowed_users': allowed_users
+    }
+    res = http_request.make_post_request(CREATE_REGISTRY_API, params)
+
+    return res
+
+def get_registry_details(user_id, registry_id):
+
+    params = {
+         'user_id': user_id,
+         'registry_id': registry_id
+    }
+    res = http_request.make_get_request(GET_REGISTRY_DETAILS_API, params)
+
+    return res
+
+def add_item_to_registry(user_id, registry_id, item_id):
+
+    params = {
+        'user_id' : user_id,
+        'registry_id': registry_id,
+        'item_id': item_id
+    }
+    res = http_request.make_post_request(ADD_ITEM_REGISTRY_API, params)
+
+    return res
+
+def get_items():
+
+    params = {}
+    res = http_request.make_get_request(GET_ITEMS_API, params)
+
+    return res
+
+def get_users():
+
+    params = {}
+    res = http_request.make_get_request(GET_USERS_API, params)
+
+    return res
