@@ -16,6 +16,7 @@ import appManager
 from constants import *
 
 
+
 def index(request):
     a = {"abc":"24"};
 
@@ -31,6 +32,8 @@ def login(request):
        username = parameters['username']
        password = parameters['password']
        result = appManager.login(username, password)
+
+       appManager.cacheResult(result)
 
     return JsonResponse(result)
 
@@ -137,14 +140,22 @@ def unassign_item(request):
 
 def get_registry_details(request):
 
-    user_details = appManager.get_user_details_from_request(request)
+    print("Looking for data in cache")
+    user_id = appManager.getUserIdFromCache(request)
+
+    if user_id is None:
+       print("Did not find data in cache -- CACHE MISS")
+       user_details = appManager.get_user_details_from_request(request)
+       user_id = user_details['id']
+    else:
+       print("Found data in cache -- CACHE HIT") 
     # parameters = json.loads(request.body)
 
     # if 'registry_id' not in parameters:
     #     appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     registry_id = request.GET['registry_id']
-    res = appManager.get_registry_details(user_details['id'], registry_id)
+    res = appManager.get_registry_details(user_id, registry_id)
 
     return JsonResponse(res)
 

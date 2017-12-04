@@ -1,7 +1,7 @@
 
 import http_request
 from constants import *
-
+from django.core.cache import cache
 
 
 LOGIN_API = '/createtoken'
@@ -21,6 +21,25 @@ GET_USERS_API = '/getusers'
 FORGOT_PASSWORD_API = '/forgotpassword'
 ADD_ITEM_TO_INVENTORY_API = "/additemtoinventory"
 REMOVE_ITEM_FROM_INVENTORY_API = "/removeitemfrominventory"
+
+def cacheResult(result):
+    
+    if 'token' in result and 'user_id' in result:
+        token = result['token']
+        user_id = result['user_id']
+
+        cache.set(token, user_id, 30)
+
+def getUserIdFromCache(request):
+
+    if KEY_HTTP_TOKEN not in request.META:
+       return return_error_response(CODE_FORBIDDEN, MESSAGE_NOT_LOGGED_IN);
+
+    token = request.META[KEY_HTTP_TOKEN]
+    user_id = cache.get(token)
+
+    return user_id
+
 
 
 def login(username, password):
