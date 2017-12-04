@@ -154,11 +154,11 @@ def add_item_to_registry(request):
 
     parameters = json.loads(request.body)
     if 'registry_id' not in parameters or 'item_id' not in parameters:
-        appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
+        return appManager.return_error_response(CODE_NOT_FOUND, MESSAGE_MISSING_PARAMETERS)
 
     registry_id = parameters['registry_id']
     item_id = parameters['item_id']
-    print user_details
+    
     res = appManager.add_item_to_registry(user_details['id'], registry_id, item_id)
 
     return JsonResponse(res)
@@ -183,4 +183,27 @@ def forgot_password(request):
     res = appManager.forgot_password(email)
 
     return JsonResponse(res)
+
+@csrf_exempt
+def add_item_to_inventory(request):
+
+    user_details = appManager.get_user_details_from_request(request)
+    
+    parameters = json.loads(request.body)
+    parameters['user_id'] = user_details['id']
+    res = appManager.add_item_to_inventory(parameters)
+
+    return JsonResponse(res)
+
+@csrf_exempt
+def remove_item_from_inventory(request):
+
+    user_details = appManager.get_user_details_from_request(request)
+
+    parameters = json.loads(request.body)
+    parameters['user_id'] = user_details['id']
+    res = appManager.remove_item_from_inventory(parameters)
+
+    return JsonResponse(res)
+
 

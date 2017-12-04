@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'^additemtoregistry', views.add_item_to_registry, name='get_registry_details'),
     url(r'^items', views.get_items, name='get_items'),
     url(r'^getusers', views.get_users, name='get_users'),
-    url(r'^forgotpassword', views.forgot_password, name='forgot_password')  
+    url(r'^forgotpassword', views.forgot_password, name='forgot_password'),
+    url(r'^additemtoinventory', views.add_item_to_inventory, name='add_item_to_inventory'),
+    url(r'^removeitemfrominventory', views.remove_item_from_inventory, name='remove_item_from_inventory')  
 ]

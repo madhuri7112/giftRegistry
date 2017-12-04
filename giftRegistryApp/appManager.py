@@ -19,6 +19,8 @@ ADD_ITEM_REGISTRY_API = '/additemtoregistry'
 GET_ITEMS_API = '/items'
 GET_USERS_API = '/getusers'
 FORGOT_PASSWORD_API = '/forgotpassword'
+ADD_ITEM_TO_INVENTORY_API = "/additemtoinventory"
+REMOVE_ITEM_FROM_INVENTORY_API = "/removeitemfrominventory"
 
 
 def login(username, password):
@@ -176,4 +178,17 @@ def forgot_password(email):
     res = http_request.make_post_request(FORGOT_PASSWORD_API, params)
 
     return res
+
+def add_item_to_inventory(params):
+
+    res = http_request.make_post_request(ADD_ITEM_TO_INVENTORY_API, params)
+
+    return res
+
+def remove_item_from_inventory(params):
+
+    res = http_request.make_post_request(REMOVE_ITEM_FROM_INVENTORY_API, params)
+
+    return res
+
 
