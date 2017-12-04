@@ -13,7 +13,8 @@ def make_post_request(url, params):
    
     headers = {
     'content-type': "application/json",
-    'cache-control': "no-cache"
+    'cache-control': "no-cache",
+    'Authorization': SECRET_TOKEN
     }
 
     r = requests.post(post_url, data = json.dumps(params), headers = headers)
@@ -26,7 +27,8 @@ def make_get_request(url, params):
 
     headers = {
     'content-type': "application/json",
-    'cache-control': "no-cache"
+    'cache-control': "no-cache",
+    'Authorization': SECRET_TOKEN
     }
 
     r = requests.get(get_url, params = params, headers = headers)
