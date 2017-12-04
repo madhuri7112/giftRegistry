@@ -16,11 +16,13 @@ UNASSIGN_ITEM_API = '/unassignitem'
 CREATE_REGISTRY_API = '/createregistry'
 GET_REGISTRY_DETAILS_API = '/getregistry'
 ADD_ITEM_REGISTRY_API = '/additemtoregistry'
+REMOVE_ITEM_REGISTRY_API = '/removeitemfromregistry'
 GET_ITEMS_API = '/items'
 GET_USERS_API = '/getusers'
 FORGOT_PASSWORD_API = '/forgotpassword'
 ADD_ITEM_TO_INVENTORY_API = "/additemtoinventory"
 REMOVE_ITEM_FROM_INVENTORY_API = "/removeitemfrominventory"
+
 
 def cacheResult(result):
     
@@ -174,6 +176,17 @@ def add_item_to_registry(user_id, registry_id, item_id):
         'item_id': item_id
     }
     res = http_request.make_post_request(ADD_ITEM_REGISTRY_API, params)
+
+    return res
+
+def remove_item_from_registry(user_id, registry_id, item_id):
+
+    params = {
+        'user_id' : user_id,
+        'registry_id': registry_id,
+        'item_id': item_id
+    }
+    res = http_request.make_post_request(REMOVE_ITEM_REGISTRY_API, params)
 
     return res
 

@@ -1,7 +1,8 @@
 import requests
 import json
+from constants import *
 
-SERVICES_DOMAIN_URL = "http://localhost:8000/giftAway"
+SERVICES_DOMAIN_URL = "http://localhost:3000/giftAway"
 SECRET_TOKEN = "secret_token"
 
 

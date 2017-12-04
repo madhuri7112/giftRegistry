@@ -14,13 +14,13 @@ import json
 
 import appManager
 from constants import *
-
+import cStringIO, gzip
 
 
 def index(request):
     a = {"abc":"24"};
 
-    return  JsonResponse({'foo':'bar'});
+    return  JsonResponse({'foo 111':'bar'});
 
 @csrf_exempt
 def login(request):
@@ -174,6 +174,19 @@ def add_item_to_registry(request):
 
     return JsonResponse(res)
 
+@csrf_exempt
+def remove_item_from_registry(request):
+    user_details = appManager.get_user_details_from_request(request)
+    
+    parameters = json.loads(request.body)
+
+    registry_id = parameters['registry_id']
+    item_id = parameters['item_id']
+
+    res = appManager.remove_item_from_registry(user_details['id'], registry_id, item_id)
+
+    return JsonResponse(res)
+    
 def get_items(request):
 
     res = appManager.get_items()
