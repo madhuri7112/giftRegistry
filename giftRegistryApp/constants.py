@@ -4,3 +4,4 @@ CODE_FORBIDDEN = 403
 MESSAGE_MISSING_PARAMETERS = "Missing parameters"
 MESSAGE_NOT_LOGGED_IN  = "You are not logged in."
 KEY_HTTP_TOKEN = 'HTTP_AUTHORIZATION'
+SOMETHING_WENT_WRONG = 'Something went wrong.'

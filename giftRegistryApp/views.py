@@ -175,3 +175,12 @@ def get_users(request):
 
     return JsonResponse(res)
 
+@csrf_exempt
+def forgot_password(request):
+
+    parameters = json.loads(request.body)
+    email = parameters['email']
+    res = appManager.forgot_password(email)
+
+    return JsonResponse(res)
+

@@ -18,6 +18,7 @@ GET_REGISTRY_DETAILS_API = '/getregistry'
 ADD_ITEM_REGISTRY_API = '/additemtoregistry'
 GET_ITEMS_API = '/items'
 GET_USERS_API = '/getusers'
+FORGOT_PASSWORD_API = '/forgotpassword'
 
 
 def login(username, password):
@@ -168,3 +169,11 @@ def get_users():
     res = http_request.make_get_request(GET_USERS_API, params)
 
     return res
+
+def forgot_password(email):
+
+    params = {'email': email}
+    res = http_request.make_post_request(FORGOT_PASSWORD_API, params)
+
+    return res
+

@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^getregistry', views.get_registry_details, name='get_registry_details'),
     url(r'^additemtoregistry', views.add_item_to_registry, name='get_registry_details'),
     url(r'^items', views.get_items, name='get_items'),
-    url(r'^getusers', views.get_users, name='get_users')   
+    url(r'^getusers', views.get_users, name='get_users'),
+    url(r'^forgotpassword', views.forgot_password, name='forgot_password')  
 ]
