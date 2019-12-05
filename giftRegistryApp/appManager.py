@@ -44,16 +44,7 @@ def getUserIdFromCache(request):
 
 
 
-def login(username, password):
 
-    params = {
-    'username': username, 
-    'password': password
-    }
-    
-    res = http_request.make_post_request(LOGIN_API, params)
-    
-    return res
 
 def logout(user_id):
 
